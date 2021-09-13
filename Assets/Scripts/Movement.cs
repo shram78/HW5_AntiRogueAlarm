@@ -18,14 +18,14 @@ public class Movement : MonoBehaviour
         if (Input.GetKey(KeyCode.D))
         {
             transform.Translate(_speed * Time.deltaTime, 0, 0);
-            GetComponent<SpriteRenderer>().flipX = false;
+           // GetComponent<SpriteRenderer>().flipX = false;
             _animator.SetTrigger("Run");
         }
 
         if (Input.GetKey(KeyCode.A))
         {
             transform.Translate(_speed * Time.deltaTime * -1, 0, 0);
-            GetComponent<SpriteRenderer>().flipX = true;
+          //  GetComponent<SpriteRenderer>().flipX = true;
             _animator.SetTrigger("Run");
         }
     }
