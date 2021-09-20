@@ -5,33 +5,36 @@ using UnityEngine;
 public class Movement : MonoBehaviour
 {
     [SerializeField] private float _speed;
+    [SerializeField] private SpriteRenderer _spriteRenderer;
 
-    private SpriteRenderer _spriteRenderer;
     private Animator _animator;
-    private const string _isRunning = "isRunning";
+
+    private const string IsRunning = "isRunning";
 
     private void Start()
     {
-        _spriteRenderer = GetComponent<SpriteRenderer>();
         _animator = GetComponent<Animator>();
     }
 
     private void Update()
     {
-        _animator.SetBool(_isRunning, false);
+        _animator.SetBool(IsRunning, false);
 
         if (Input.GetKey(KeyCode.D))
         {
-            transform.Translate(_speed * Time.deltaTime, 0, 0);
-            _spriteRenderer.flipX = false;
-            _animator.SetBool(_isRunning, true);
+            Move(1, false);
         }
 
         if (Input.GetKey(KeyCode.A))
         {
-            transform.Translate(_speed * Time.deltaTime * -1, 0, 0);
-            _spriteRenderer.flipX = true;
-            _animator.SetBool(_isRunning, true);
+            Move(-1, true);
         }
+    }
+
+    private void Move(int direction, bool flip)
+    {
+        transform.Translate(_speed * Time.deltaTime * direction, 0, 0);
+        _spriteRenderer.flipX = flip;
+        _animator.SetBool(IsRunning, true);
     }
 }

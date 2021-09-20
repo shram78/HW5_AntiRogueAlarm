@@ -2,47 +2,57 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ManageSignaling : MonoBehaviour
+public class Siren : MonoBehaviour
 {
-    [SerializeField] private SpriteRenderer _renderer;
-    [SerializeField] private Animator _animator;
+    [SerializeField] private Player _player;
 
+    private Animator _animator;
     private AudioSource _audioSource;
+
     private const string _doorOpen = "isDoorOpen";
 
     private void Start()
     {
+        _animator = GetComponent<Animator>();
         _audioSource = GetComponent<AudioSource>();
     }
 
-    public void OpenDoor()
+    private void OnEnable()
     {
-        _renderer.color = Color.white;
-        _audioSource.volume = 0f;
+        _player.EnteredTheBank += LightOn;
+        _player.EnteredTheBank += SoundOn;
+
+        _player.LeftTheBank += LoghtOff;
+        _player.LeftTheBank += SoundOff;
     }
 
-    public void CloseDoor()
+    private void OnDisable()
     {
-        _renderer.color = Color.clear;
+        _player.EnteredTheBank -= LightOn;
+        _player.EnteredTheBank -= SoundOn;
+
+        _player.LeftTheBank -= LoghtOff;
+        _player.LeftTheBank -= SoundOff;
     }
 
-    public void LightSignalingOn()
+    private void LightOn()
     {
         _animator.SetBool(_doorOpen, true);
     }
 
-    public void LightSignalingOff()
+    private void LoghtOff()
     {
         _animator.SetBool(_doorOpen, false);
     }
 
-    public void SoundSignalingOn()
+    private void SoundOn()
     {
+        _audioSource.volume = 0f;
         _audioSource.Play();
         StartCoroutine(VolumeChange(1));
     }
 
-    public void SoundSignalingOff()
+    private void SoundOff()
     {
         StartCoroutine(VolumeChange(-1));
     }
