@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(SpriteRenderer))]
+
 public class Door : MonoBehaviour
 {
     [SerializeField] private Player _player;

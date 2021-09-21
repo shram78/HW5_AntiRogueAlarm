@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(AudioSource))]
+
 public class Siren : MonoBehaviour
 {
     [SerializeField] private Player _player;
@@ -9,7 +12,7 @@ public class Siren : MonoBehaviour
     private Animator _animator;
     private AudioSource _audioSource;
 
-    private const string _doorOpen = "isDoorOpen";
+    private const string DoorOpen = "isDoorOpen";
 
     private void Start()
     {
@@ -37,34 +40,36 @@ public class Siren : MonoBehaviour
 
     private void LightOn()
     {
-        _animator.SetBool(_doorOpen, true);
+        _animator.SetBool(DoorOpen, true);
     }
 
     private void LoghtOff()
     {
-        _animator.SetBool(_doorOpen, false);
+        _animator.SetBool(DoorOpen, false);
     }
 
     private void SoundOn()
     {
         _audioSource.volume = 0f;
         _audioSource.Play();
-        StartCoroutine(VolumeChange(1));
+        StartCoroutine(VolumeChange(1, 1));
     }
 
     private void SoundOff()
     {
-        StartCoroutine(VolumeChange(-1));
+        StartCoroutine(VolumeChange(-1, 0));
     }
 
-    private IEnumerator VolumeChange(int volumeUpDown)
+    private IEnumerator VolumeChange(int volumeUpDownValue, int targetVolume)
     {
-        for (int i = 0; i < 1000; i++)
+        while (_audioSource.volume != targetVolume)
         {
-            _audioSource.volume = Mathf.MoveTowards(_audioSource.volume, 1f, 0.5f * Time.deltaTime * volumeUpDown);
+            _audioSource.volume = Mathf.MoveTowards(_audioSource.volume, 1f, 0.5f * Time.deltaTime * volumeUpDownValue);
             Debug.Log(_audioSource.volume);
-
             yield return null;
         }
+
+        if (_audioSource.volume == 0)
+            _audioSource.Stop();
     }
 }
